@@ -13,11 +13,21 @@ def index():
 
 @app.route("/about")
 def about():
-    data = []
-    with open("data/company.json", "r") as json_data:
-        data = json.load(json_data)
-    return render_template("about.html", page_title="About", company=data)
-
+    # data = []
+    # with open("data/company.json", "r") as json_data:
+    #     data = json.load(json_data)
+    # return render_template("about.html", page_title="About", company=data)
+    try:
+        with open("/workspace/thorin-flask-project/.devcontainer/data/company.json", "r") as json_data:
+            data = json.load(json_data)
+        return render_template("about.html", page_title="About", company=data)
+    except FileNotFoundError:
+        # Handle the case where the file is not found
+        abort(404)
+    except Exception as e:
+        # Handle other unexpected errors
+        print(f"An unexpected error occurred: {e}")
+        abort(500)
 
 @app.route("/about/<member_name>")
 def about_member(member_name):
